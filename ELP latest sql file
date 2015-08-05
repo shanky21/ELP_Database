@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 11.0 SQL Code Generation
 -- Project :      ELP Prospects Model latest.dm1
 --
--- Date Created : Thursday, July 23, 2015 21:37:18
+-- Date Created : Wednesday, August 05, 2015 18:05:23
 -- Target DBMS : MySQL 5.x
 --
 
@@ -28,9 +28,8 @@ CREATE TABLE batspeed_stats(
 
 CREATE TABLE catcher_stats(
     catcher_id              INT              AUTO_INCREMENT,
-    sixty_yard_time         DECIMAL(4, 2)    NOT NULL,
     pop_time                DECIMAL(4, 2),
-    date_stats_collected    DATE,
+    date_stats_collected    DATE             NOT NULL,
     player_id               INT,
     PRIMARY KEY (catcher_id)
 )ENGINE=INNODB
@@ -44,12 +43,8 @@ CREATE TABLE catcher_stats(
 
 CREATE TABLE infielder_stats(
     infielder_id            INT         AUTO_INCREMENT,
-    sixty_yard_time         SMALLINT    NOT NULL,
     throwing_speed          SMALLINT,
-    vertical_leap           SMALLINT,
-    shuttle_run             SMALLINT,
-    reach                   SMALLINT,
-    date_stats_collected    DATE,
+    date_stats_collected    DATE        NOT NULL,
     player_id               INT,
     PRIMARY KEY (infielder_id)
 )ENGINE=INNODB
@@ -63,12 +58,8 @@ CREATE TABLE infielder_stats(
 
 CREATE TABLE outfielder_stats(
     outfielder_id           INT         AUTO_INCREMENT,
-    sixty_yard_time         SMALLINT    NOT NULL,
     throwing_speed          SMALLINT,
-    vertical_leap           SMALLINT,
-    shuttle_run             SMALLINT,
-    reach                   SMALLINT,
-    date_stats_collected    DATE,
+    date_stats_collected    DATE        NOT NULL,
     player_id               INT,
     PRIMARY KEY (outfielder_id)
 )ENGINE=INNODB
@@ -82,13 +73,13 @@ CREATE TABLE outfielder_stats(
 
 CREATE TABLE pitcher_stats(
     pitcher_id              INT         AUTO_INCREMENT,
-    two_seem                SMALLINT    NOT NULL,
+    two_seem                SMALLINT,
     four_seem               SMALLINT,
     changeball              SMALLINT,
     curveball               SMALLINT,
     slider                  SMALLINT,
     knuckleball             SMALLINT,
-    date_stats_collected    DATE,
+    date_stats_collected    DATE        NOT NULL,
     player_id               INT,
     PRIMARY KEY (pitcher_id)
 )ENGINE=INNODB
@@ -101,11 +92,12 @@ CREATE TABLE pitcher_stats(
 --
 
 CREATE TABLE player_details(
-    player_id     INT            AUTO_INCREMENT,
-    first_name    VARCHAR(30)    NOT NULL,
-    last_name     VARCHAR(30)    NOT NULL,
-    dob           DATE           NOT NULL,
+    player_id     INT              AUTO_INCREMENT,
+    first_name    VARCHAR(30)      NOT NULL,
+    last_name     VARCHAR(30)      NOT NULL,
+    dob           DATE             NOT NULL,
     grad_year     SMALLINT,
+    gpa           DECIMAL(4, 2),
     height        INT,
     weight        INT,
     throws        CHAR(10),
@@ -136,15 +128,34 @@ CREATE TABLE player_position(
 
 
 -- 
+-- TABLE: player_speed 
+--
+
+CREATE TABLE player_speed(
+    player_speed_id         INT              AUTO_INCREMENT,
+    sixty_yard_time         DECIMAL(4, 2),
+    onetwenty_yard_time     DECIMAL(4, 2),
+    vertical_leap           SMALLINT,
+    shuttle_run             DECIMAL(4, 2),
+    reach                   SMALLINT,
+    date_stats_collected    DATE             NOT NULL,
+    player_id               INT,
+    PRIMARY KEY (player_speed_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
 -- TABLE: player_strength 
 --
 
 CREATE TABLE player_strength(
-    player_strength_id      INT     AUTO_INCREMENT,
-    bench_press             INT,
-    squat                   INT,
+    player_strength_id      INT         AUTO_INCREMENT,
+    bench_press             SMALLINT,
+    squat                   SMALLINT,
     dead_lift               INT,
-    date_stats_collected    DATE    NOT NULL,
+    date_stats_collected    DATE        NOT NULL,
     player_id               INT,
     PRIMARY KEY (player_strength_id)
 )ENGINE=INNODB
@@ -253,6 +264,16 @@ ALTER TABLE player_position ADD CONSTRAINT Refplayer_details13
 ALTER TABLE player_position ADD CONSTRAINT Refpositions14 
     FOREIGN KEY (pos_id)
     REFERENCES positions(pos_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_speed 
+--
+
+ALTER TABLE player_speed ADD CONSTRAINT Refplayer_details16 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
 
