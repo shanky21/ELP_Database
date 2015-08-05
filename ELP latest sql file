@@ -1,0 +1,268 @@
+--
+-- ER/Studio Data Architect 11.0 SQL Code Generation
+-- Project :      ELP Prospects Model latest.dm1
+--
+-- Date Created : Thursday, July 23, 2015 21:37:18
+-- Target DBMS : MySQL 5.x
+--
+
+-- 
+-- TABLE: batspeed_stats 
+--
+
+CREATE TABLE batspeed_stats(
+    batspeed_id             INT         AUTO_INCREMENT,
+    bat_speed               SMALLINT,
+    exit_velocity           SMALLINT,
+    date_stats_collected    DATE        NOT NULL,
+    player_id               INT,
+    PRIMARY KEY (batspeed_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: catcher_stats 
+--
+
+CREATE TABLE catcher_stats(
+    catcher_id              INT              AUTO_INCREMENT,
+    sixty_yard_time         DECIMAL(4, 2)    NOT NULL,
+    pop_time                DECIMAL(4, 2),
+    date_stats_collected    DATE,
+    player_id               INT,
+    PRIMARY KEY (catcher_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: infielder_stats 
+--
+
+CREATE TABLE infielder_stats(
+    infielder_id            INT         AUTO_INCREMENT,
+    sixty_yard_time         SMALLINT    NOT NULL,
+    throwing_speed          SMALLINT,
+    vertical_leap           SMALLINT,
+    shuttle_run             SMALLINT,
+    reach                   SMALLINT,
+    date_stats_collected    DATE,
+    player_id               INT,
+    PRIMARY KEY (infielder_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: outfielder_stats 
+--
+
+CREATE TABLE outfielder_stats(
+    outfielder_id           INT         AUTO_INCREMENT,
+    sixty_yard_time         SMALLINT    NOT NULL,
+    throwing_speed          SMALLINT,
+    vertical_leap           SMALLINT,
+    shuttle_run             SMALLINT,
+    reach                   SMALLINT,
+    date_stats_collected    DATE,
+    player_id               INT,
+    PRIMARY KEY (outfielder_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: pitcher_stats 
+--
+
+CREATE TABLE pitcher_stats(
+    pitcher_id              INT         AUTO_INCREMENT,
+    two_seem                SMALLINT    NOT NULL,
+    four_seem               SMALLINT,
+    changeball              SMALLINT,
+    curveball               SMALLINT,
+    slider                  SMALLINT,
+    knuckleball             SMALLINT,
+    date_stats_collected    DATE,
+    player_id               INT,
+    PRIMARY KEY (pitcher_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_details 
+--
+
+CREATE TABLE player_details(
+    player_id     INT            AUTO_INCREMENT,
+    first_name    VARCHAR(30)    NOT NULL,
+    last_name     VARCHAR(30)    NOT NULL,
+    dob           DATE           NOT NULL,
+    grad_year     SMALLINT,
+    height        INT,
+    weight        INT,
+    throws        CHAR(10),
+    bats          CHAR(10),
+    city          VARCHAR(25),
+    state         VARCHAR(25),
+    country       VARCHAR(25),
+    picture       VARCHAR(15),
+    school_id     INT,
+    PRIMARY KEY (player_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_position 
+--
+
+CREATE TABLE player_position(
+    player_pos_id    INT    AUTO_INCREMENT,
+    pos_id           INT    NOT NULL,
+    player_id        INT    NOT NULL,
+    PRIMARY KEY (player_pos_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_strength 
+--
+
+CREATE TABLE player_strength(
+    player_strength_id      INT     AUTO_INCREMENT,
+    bench_press             INT,
+    squat                   INT,
+    dead_lift               INT,
+    date_stats_collected    DATE    NOT NULL,
+    player_id               INT,
+    PRIMARY KEY (player_strength_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: positions 
+--
+
+CREATE TABLE positions(
+    pos_id      INT            AUTO_INCREMENT,
+    pos_name    VARCHAR(25)    NOT NULL,
+    PRIMARY KEY (pos_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: school 
+--
+
+CREATE TABLE school(
+    school_id    INT            AUTO_INCREMENT,
+    name         VARCHAR(30)    NOT NULL,
+    city         VARCHAR(25)    NOT NULL,
+    state        VARCHAR(25)    NOT NULL,
+    country      VARCHAR(25),
+    PRIMARY KEY (school_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: batspeed_stats 
+--
+
+ALTER TABLE batspeed_stats ADD CONSTRAINT Refplayer_details12 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: catcher_stats 
+--
+
+ALTER TABLE catcher_stats ADD CONSTRAINT Refplayer_details8 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: infielder_stats 
+--
+
+ALTER TABLE infielder_stats ADD CONSTRAINT Refplayer_details9 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: outfielder_stats 
+--
+
+ALTER TABLE outfielder_stats ADD CONSTRAINT Refplayer_details11 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: pitcher_stats 
+--
+
+ALTER TABLE pitcher_stats ADD CONSTRAINT Refplayer_details10 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_details 
+--
+
+ALTER TABLE player_details ADD CONSTRAINT Refschool1 
+    FOREIGN KEY (school_id)
+    REFERENCES school(school_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_position 
+--
+
+ALTER TABLE player_position ADD CONSTRAINT Refplayer_details13 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE player_position ADD CONSTRAINT Refpositions14 
+    FOREIGN KEY (pos_id)
+    REFERENCES positions(pos_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_strength 
+--
+
+ALTER TABLE player_strength ADD CONSTRAINT Refplayer_details15 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
