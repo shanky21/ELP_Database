@@ -1,0 +1,551 @@
+--
+-- ER/Studio Data Architect XE3 SQL Code Generation
+-- Project :      ELP Prospects Model latest.dm1
+--
+-- Date Created : Sunday, October 04, 2015 19:55:18
+-- Target DBMS : MySQL 5.x
+--
+
+-- 
+-- TABLE: batspeed_stats 
+--
+
+CREATE TABLE batspeed_stats(
+    batspeed_id             INT             AUTO_INCREMENT,
+    bat_speed               SMALLINT,
+    exit_velocity           SMALLINT,
+    date_stats_collected    DATE            NOT NULL,
+    video_path              VARCHAR(512),
+    date_video_uploaded     DATE,
+    score                   FLOAT(8, 0),
+    player_id               INT,
+    PRIMARY KEY (batspeed_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: catcher_stats 
+--
+
+CREATE TABLE catcher_stats(
+    catcher_id              INT              AUTO_INCREMENT,
+    pop_time                DECIMAL(4, 2),
+    date_stats_collected    DATE             NOT NULL,
+    player_id               INT,
+    PRIMARY KEY (catcher_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: cities 
+--
+
+CREATE TABLE cities(
+    city_id      INT            AUTO_INCREMENT,
+    city_name    VARCHAR(20)    NOT NULL,
+    state_id     INT,
+    PRIMARY KEY (city_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: coach 
+--
+
+CREATE TABLE coach(
+    coach_id        INT            AUTO_INCREMENT,
+    first_name      VARCHAR(30)    NOT NULL,
+    last_name       VARCHAR(30)    NOT NULL,
+    phone_number    VARCHAR(15),
+    picture_id      VARCHAR(15),
+    account_id      INT,
+    gender_id       TINYINT,
+    city_id         INT,
+    PRIMARY KEY (coach_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: coach_comments 
+--
+
+CREATE TABLE coach_comments(
+    comment_id      INT             AUTO_INCREMENT,
+    comment         VARCHAR(255),
+    comment_date    DATETIME        NOT NULL,
+    coach_id        INT,
+    player_id       INT,
+    PRIMARY KEY (comment_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: coach_follows_player 
+--
+
+CREATE TABLE coach_follows_player(
+    follow_id    INT    AUTO_INCREMENT,
+    coach_id     INT,
+    player_id    INT,
+    PRIMARY KEY (follow_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: fielding_stats 
+--
+
+CREATE TABLE fielding_stats(
+    fielder_id              INT         AUTO_INCREMENT,
+    throwing_speed          SMALLINT,
+    date_stats_collected    DATE        NOT NULL,
+    player_pos_id           INT,
+    PRIMARY KEY (fielder_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: gender 
+--
+
+CREATE TABLE gender(
+    gender_id      TINYINT     AUTO_INCREMENT,
+    gender_type    CHAR(10)    NOT NULL,
+    PRIMARY KEY (gender_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: pitcher_stats 
+--
+
+CREATE TABLE pitcher_stats(
+    pitcher_id              INT             AUTO_INCREMENT,
+    two_seem                SMALLINT,
+    four_seem               SMALLINT,
+    changeball              SMALLINT,
+    curveball               SMALLINT,
+    slider                  SMALLINT,
+    knuckleball             SMALLINT,
+    date_stats_collected    DATE            NOT NULL,
+    video_path              VARCHAR(512),
+    date_video_uploaded     DATE,
+    player_id               INT,
+    PRIMARY KEY (pitcher_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_details 
+--
+
+CREATE TABLE player_details(
+    player_id       INT              AUTO_INCREMENT,
+    first_name      VARCHAR(30)      NOT NULL,
+    last_name       VARCHAR(30)      NOT NULL,
+    dob             DATE             NOT NULL,
+    grad_year       SMALLINT,
+    gpa             DECIMAL(4, 2),
+    height          INT,
+    weight          INT,
+    throws          CHAR(10),
+    bats            CHAR(10),
+    phone_number    VARCHAR(15),
+    address         VARCHAR(255),
+    picture_id      VARCHAR(15),
+    school_id       INT,
+    account_id      INT,
+    gender_id       TINYINT,
+    zipcode_id      INT,
+    PRIMARY KEY (player_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_position 
+--
+
+CREATE TABLE player_position(
+    player_pos_id    INT    AUTO_INCREMENT,
+    pos_id           INT    NOT NULL,
+    player_id        INT    NOT NULL,
+    PRIMARY KEY (player_pos_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_speed 
+--
+
+CREATE TABLE player_speed(
+    player_speed_id         INT              AUTO_INCREMENT,
+    sixty_yard_time         DECIMAL(4, 2),
+    onetwenty_yard_time     DECIMAL(4, 2),
+    vertical_leap           SMALLINT,
+    shuttle_run             DECIMAL(4, 2),
+    reach                   SMALLINT,
+    date_stats_collected    DATE             NOT NULL,
+    video_path              VARCHAR(512),
+    date_video_uploaded     DATE,
+    score                   FLOAT(8, 0),
+    player_id               INT,
+    PRIMARY KEY (player_speed_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: player_strength 
+--
+
+CREATE TABLE player_strength(
+    player_strength_id      INT         AUTO_INCREMENT,
+    bench_press             SMALLINT,
+    squat                   SMALLINT,
+    dead_lift               INT,
+    date_stats_collected    DATE        NOT NULL,
+    player_id               INT,
+    PRIMARY KEY (player_strength_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: positions 
+--
+
+CREATE TABLE positions(
+    pos_id      INT            AUTO_INCREMENT,
+    pos_name    VARCHAR(25)    NOT NULL,
+    PRIMARY KEY (pos_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: role 
+--
+
+CREATE TABLE role(
+    role_type    TINYINT        AUTO_INCREMENT,
+    role_name    VARCHAR(15)    NOT NULL,
+    PRIMARY KEY (role_type)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: school 
+--
+
+CREATE TABLE school(
+    school_id    INT            AUTO_INCREMENT,
+    name         VARCHAR(30)    NOT NULL,
+    city_id      INT,
+    PRIMARY KEY (school_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: states 
+--
+
+CREATE TABLE states(
+    state_id      INT            AUTO_INCREMENT,
+    state_name    VARCHAR(20)    NOT NULL,
+    PRIMARY KEY (state_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: trainer 
+--
+
+CREATE TABLE trainer(
+    trainer_id      INT            AUTO_INCREMENT,
+    first_name      VARCHAR(30)    NOT NULL,
+    last_name       VARCHAR(30)    NOT NULL,
+    phone_number    VARCHAR(15),
+    picture_id      VARCHAR(15),
+    account_id      INT,
+    gender_id       TINYINT,
+    city_id         INT,
+    PRIMARY KEY (trainer_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: user_login 
+--
+
+CREATE TABLE user_login(
+    account_id    INT            AUTO_INCREMENT,
+    username      VARCHAR(25)    NOT NULL,
+    password      VARCHAR(70)    NOT NULL,
+    email_id      VARCHAR(70)    NOT NULL,
+    salt          BINARY(32)     NOT NULL,
+    created_at    DATETIME       NOT NULL,
+    updated_at    DATETIME       NOT NULL,
+    role_type     TINYINT,
+    PRIMARY KEY (account_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: zipcodes 
+--
+
+CREATE TABLE zipcodes(
+    zipcode_id      INT            AUTO_INCREMENT,
+    zipcode_name    VARCHAR(10)    NOT NULL,
+    city_id         INT,
+    PRIMARY KEY (zipcode_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: batspeed_stats 
+--
+
+ALTER TABLE batspeed_stats ADD CONSTRAINT Refplayer_details12 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: catcher_stats 
+--
+
+ALTER TABLE catcher_stats ADD CONSTRAINT Refplayer_details8 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: cities 
+--
+
+ALTER TABLE cities ADD CONSTRAINT Refstates34 
+    FOREIGN KEY (state_id)
+    REFERENCES states(state_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: coach 
+--
+
+ALTER TABLE coach ADD CONSTRAINT Refuser_login26 
+    FOREIGN KEY (account_id)
+    REFERENCES user_login(account_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE coach ADD CONSTRAINT Refgender32 
+    FOREIGN KEY (gender_id)
+    REFERENCES gender(gender_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE coach ADD CONSTRAINT Refcities38 
+    FOREIGN KEY (city_id)
+    REFERENCES cities(city_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: coach_comments 
+--
+
+ALTER TABLE coach_comments ADD CONSTRAINT Refcoach24 
+    FOREIGN KEY (coach_id)
+    REFERENCES coach(coach_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE coach_comments ADD CONSTRAINT Refplayer_details25 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: coach_follows_player 
+--
+
+ALTER TABLE coach_follows_player ADD CONSTRAINT Refcoach21 
+    FOREIGN KEY (coach_id)
+    REFERENCES coach(coach_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE coach_follows_player ADD CONSTRAINT Refplayer_details22 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: fielding_stats 
+--
+
+ALTER TABLE fielding_stats ADD CONSTRAINT Refplayer_position23 
+    FOREIGN KEY (player_pos_id)
+    REFERENCES player_position(player_pos_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: pitcher_stats 
+--
+
+ALTER TABLE pitcher_stats ADD CONSTRAINT Refplayer_details10 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_details 
+--
+
+ALTER TABLE player_details ADD CONSTRAINT Refschool1 
+    FOREIGN KEY (school_id)
+    REFERENCES school(school_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE player_details ADD CONSTRAINT Refuser_login18 
+    FOREIGN KEY (account_id)
+    REFERENCES user_login(account_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE player_details ADD CONSTRAINT Refgender19 
+    FOREIGN KEY (gender_id)
+    REFERENCES gender(gender_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE player_details ADD CONSTRAINT Refzipcodes36 
+    FOREIGN KEY (zipcode_id)
+    REFERENCES zipcodes(zipcode_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_position 
+--
+
+ALTER TABLE player_position ADD CONSTRAINT Refplayer_details13 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE player_position ADD CONSTRAINT Refpositions14 
+    FOREIGN KEY (pos_id)
+    REFERENCES positions(pos_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_speed 
+--
+
+ALTER TABLE player_speed ADD CONSTRAINT Refplayer_details16 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: player_strength 
+--
+
+ALTER TABLE player_strength ADD CONSTRAINT Refplayer_details15 
+    FOREIGN KEY (player_id)
+    REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: school 
+--
+
+ALTER TABLE school ADD CONSTRAINT Refcities39 
+    FOREIGN KEY (city_id)
+    REFERENCES cities(city_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: trainer 
+--
+
+ALTER TABLE trainer ADD CONSTRAINT Refuser_login27 
+    FOREIGN KEY (account_id)
+    REFERENCES user_login(account_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE trainer ADD CONSTRAINT Refgender33 
+    FOREIGN KEY (gender_id)
+    REFERENCES gender(gender_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE trainer ADD CONSTRAINT Refcities37 
+    FOREIGN KEY (city_id)
+    REFERENCES cities(city_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: user_login 
+--
+
+ALTER TABLE user_login ADD CONSTRAINT Refrole17 
+    FOREIGN KEY (role_type)
+    REFERENCES role(role_type) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: zipcodes 
+--
+
+ALTER TABLE zipcodes ADD CONSTRAINT Refcities35 
+    FOREIGN KEY (city_id)
+    REFERENCES cities(city_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
