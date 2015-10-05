@@ -1,8 +1,8 @@
 --
--- ER/Studio Data Architect 11.0 SQL Code Generation
+-- ER/Studio Data Architect XE3 SQL Code Generation
 -- Project :      ELP Prospects Model latest.dm1
 --
--- Date Created : Sunday, August 16, 2015 19:24:13
+-- Date Created : Sunday, October 04, 2015 21:23:45
 -- Target DBMS : MySQL 5.x
 --
 
@@ -11,10 +11,13 @@
 --
 
 CREATE TABLE batspeed_stats(
-    batspeed_id             INT         AUTO_INCREMENT,
+    batspeed_id             INT             AUTO_INCREMENT,
     bat_speed               SMALLINT,
     exit_velocity           SMALLINT,
-    date_stats_collected    DATE        NOT NULL,
+    date_stats_collected    DATE            NOT NULL,
+    video_path              VARCHAR(512),
+    date_video_uploaded     DATE,
+    score                   FLOAT(8, 0),
     player_id               INT,
     PRIMARY KEY (batspeed_id)
 )ENGINE=INNODB
@@ -38,15 +41,32 @@ CREATE TABLE catcher_stats(
 
 
 -- 
+-- TABLE: city_state 
+--
+
+CREATE TABLE city_state(
+    city_state_id    INT            AUTO_INCREMENT,
+    state            VARCHAR(15)    NOT NULL,
+    city             VARCHAR(15)    NOT NULL,
+    PRIMARY KEY (city_state_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
 -- TABLE: coach 
 --
 
 CREATE TABLE coach(
-    coach_id      INT            AUTO_INCREMENT,
-    first_name    VARCHAR(30)    NOT NULL,
-    last_name     VARCHAR(30)    NOT NULL,
-    city          VARCHAR(25)    NOT NULL,
-    state         VARCHAR(25)    NOT NULL,
+    coach_id         INT            AUTO_INCREMENT,
+    first_name       VARCHAR(30)    NOT NULL,
+    last_name        VARCHAR(30)    NOT NULL,
+    phone_number     VARCHAR(15),
+    picture_id       VARCHAR(15),
+    account_id       INT,
+    gender_id        TINYINT,
+    city_state_id    INT,
     PRIMARY KEY (coach_id)
 )ENGINE=INNODB
 ;
@@ -116,14 +136,16 @@ CREATE TABLE gender(
 --
 
 CREATE TABLE pitcher_stats(
-    pitcher_id              INT         AUTO_INCREMENT,
+    pitcher_id              INT             AUTO_INCREMENT,
     two_seem                SMALLINT,
     four_seem               SMALLINT,
     changeball              SMALLINT,
     curveball               SMALLINT,
     slider                  SMALLINT,
     knuckleball             SMALLINT,
-    date_stats_collected    DATE        NOT NULL,
+    date_stats_collected    DATE            NOT NULL,
+    video_path              VARCHAR(512),
+    date_video_uploaded     DATE,
     player_id               INT,
     PRIMARY KEY (pitcher_id)
 )ENGINE=INNODB
@@ -136,23 +158,24 @@ CREATE TABLE pitcher_stats(
 --
 
 CREATE TABLE player_details(
-    player_id     INT              AUTO_INCREMENT,
-    first_name    VARCHAR(30)      NOT NULL,
-    last_name     VARCHAR(30)      NOT NULL,
-    dob           DATE             NOT NULL,
-    grad_year     SMALLINT,
-    gpa           DECIMAL(4, 2),
-    height        INT,
-    weight        INT,
-    throws        CHAR(10),
-    bats          CHAR(10),
-    city          VARCHAR(25),
-    state         VARCHAR(25),
-    country       VARCHAR(25),
-    picture       VARCHAR(15),
-    school_id     INT,
-    account_id    INT,
-    gender_id     TINYINT,
+    player_id        INT              AUTO_INCREMENT,
+    first_name       VARCHAR(30)      NOT NULL,
+    last_name        VARCHAR(30)      NOT NULL,
+    dob              DATE             NOT NULL,
+    grad_year        SMALLINT,
+    gpa              DECIMAL(4, 2),
+    height           INT,
+    weight           INT,
+    throws           CHAR(10),
+    bats             CHAR(10),
+    phone_number     VARCHAR(15),
+    address          VARCHAR(255),
+    zipcode          VARCHAR(10),
+    picture_id       VARCHAR(15),
+    school_id        INT,
+    account_id       INT,
+    gender_id        TINYINT,
+    city_state_id    INT,
     PRIMARY KEY (player_id)
 )ENGINE=INNODB
 ;
@@ -185,6 +208,9 @@ CREATE TABLE player_speed(
     shuttle_run             DECIMAL(4, 2),
     reach                   SMALLINT,
     date_stats_collected    DATE             NOT NULL,
+    video_path              VARCHAR(512),
+    date_video_uploaded     DATE,
+    score                   FLOAT(8, 0),
     player_id               INT,
     PRIMARY KEY (player_speed_id)
 )ENGINE=INNODB
@@ -240,12 +266,29 @@ CREATE TABLE role(
 --
 
 CREATE TABLE school(
-    school_id    INT            AUTO_INCREMENT,
-    name         VARCHAR(30)    NOT NULL,
-    city         VARCHAR(25)    NOT NULL,
-    state        VARCHAR(25)    NOT NULL,
-    country      VARCHAR(25),
+    school_id        INT            AUTO_INCREMENT,
+    name             VARCHAR(30)    NOT NULL,
+    city_state_id    INT,
     PRIMARY KEY (school_id)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: trainer 
+--
+
+CREATE TABLE trainer(
+    trainer_id       INT            AUTO_INCREMENT,
+    first_name       VARCHAR(30)    NOT NULL,
+    last_name        VARCHAR(30)    NOT NULL,
+    phone_number     VARCHAR(15),
+    picture_id       VARCHAR(15),
+    account_id       INT,
+    gender_id        TINYINT,
+    city_state_id    INT,
+    PRIMARY KEY (trainer_id)
 )ENGINE=INNODB
 ;
 
@@ -274,7 +317,7 @@ CREATE TABLE user_login(
 -- TABLE: batspeed_stats 
 --
 
-ALTER TABLE batspeed_stats ADD CONSTRAINT Refplayer_details121 
+ALTER TABLE batspeed_stats ADD CONSTRAINT Refplayer_details12 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -284,9 +327,29 @@ ALTER TABLE batspeed_stats ADD CONSTRAINT Refplayer_details121
 -- TABLE: catcher_stats 
 --
 
-ALTER TABLE catcher_stats ADD CONSTRAINT Refplayer_details81 
+ALTER TABLE catcher_stats ADD CONSTRAINT Refplayer_details8 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: coach 
+--
+
+ALTER TABLE coach ADD CONSTRAINT Refcity_state48 
+    FOREIGN KEY (city_state_id)
+    REFERENCES city_state(city_state_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE coach ADD CONSTRAINT Refuser_login26 
+    FOREIGN KEY (account_id)
+    REFERENCES user_login(account_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE coach ADD CONSTRAINT Refgender32 
+    FOREIGN KEY (gender_id)
+    REFERENCES gender(gender_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
 
@@ -294,12 +357,12 @@ ALTER TABLE catcher_stats ADD CONSTRAINT Refplayer_details81
 -- TABLE: coach_comments 
 --
 
-ALTER TABLE coach_comments ADD CONSTRAINT Refcoach241 
+ALTER TABLE coach_comments ADD CONSTRAINT Refcoach24 
     FOREIGN KEY (coach_id)
     REFERENCES coach(coach_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE coach_comments ADD CONSTRAINT Refplayer_details251 
+ALTER TABLE coach_comments ADD CONSTRAINT Refplayer_details25 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -309,12 +372,12 @@ ALTER TABLE coach_comments ADD CONSTRAINT Refplayer_details251
 -- TABLE: coach_follows_player 
 --
 
-ALTER TABLE coach_follows_player ADD CONSTRAINT Refcoach211 
+ALTER TABLE coach_follows_player ADD CONSTRAINT Refcoach21 
     FOREIGN KEY (coach_id)
     REFERENCES coach(coach_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE coach_follows_player ADD CONSTRAINT Refplayer_details221 
+ALTER TABLE coach_follows_player ADD CONSTRAINT Refplayer_details22 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -324,7 +387,7 @@ ALTER TABLE coach_follows_player ADD CONSTRAINT Refplayer_details221
 -- TABLE: fielding_stats 
 --
 
-ALTER TABLE fielding_stats ADD CONSTRAINT Refplayer_position231 
+ALTER TABLE fielding_stats ADD CONSTRAINT Refplayer_position23 
     FOREIGN KEY (player_pos_id)
     REFERENCES player_position(player_pos_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -334,7 +397,7 @@ ALTER TABLE fielding_stats ADD CONSTRAINT Refplayer_position231
 -- TABLE: pitcher_stats 
 --
 
-ALTER TABLE pitcher_stats ADD CONSTRAINT Refplayer_details101 
+ALTER TABLE pitcher_stats ADD CONSTRAINT Refplayer_details10 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -344,17 +407,22 @@ ALTER TABLE pitcher_stats ADD CONSTRAINT Refplayer_details101
 -- TABLE: player_details 
 --
 
-ALTER TABLE player_details ADD CONSTRAINT Refschool11 
+ALTER TABLE player_details ADD CONSTRAINT Refcity_state46 
+    FOREIGN KEY (city_state_id)
+    REFERENCES city_state(city_state_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE player_details ADD CONSTRAINT Refschool1 
     FOREIGN KEY (school_id)
     REFERENCES school(school_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE player_details ADD CONSTRAINT Refuser_login181 
+ALTER TABLE player_details ADD CONSTRAINT Refuser_login18 
     FOREIGN KEY (account_id)
     REFERENCES user_login(account_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE player_details ADD CONSTRAINT Refgender191 
+ALTER TABLE player_details ADD CONSTRAINT Refgender19 
     FOREIGN KEY (gender_id)
     REFERENCES gender(gender_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -364,12 +432,12 @@ ALTER TABLE player_details ADD CONSTRAINT Refgender191
 -- TABLE: player_position 
 --
 
-ALTER TABLE player_position ADD CONSTRAINT Refplayer_details131 
+ALTER TABLE player_position ADD CONSTRAINT Refplayer_details13 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE player_position ADD CONSTRAINT Refpositions141 
+ALTER TABLE player_position ADD CONSTRAINT Refpositions14 
     FOREIGN KEY (pos_id)
     REFERENCES positions(pos_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -379,7 +447,7 @@ ALTER TABLE player_position ADD CONSTRAINT Refpositions141
 -- TABLE: player_speed 
 --
 
-ALTER TABLE player_speed ADD CONSTRAINT Refplayer_details161 
+ALTER TABLE player_speed ADD CONSTRAINT Refplayer_details16 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
@@ -389,9 +457,39 @@ ALTER TABLE player_speed ADD CONSTRAINT Refplayer_details161
 -- TABLE: player_strength 
 --
 
-ALTER TABLE player_strength ADD CONSTRAINT Refplayer_details151 
+ALTER TABLE player_strength ADD CONSTRAINT Refplayer_details15 
     FOREIGN KEY (player_id)
     REFERENCES player_details(player_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: school 
+--
+
+ALTER TABLE school ADD CONSTRAINT Refcity_state49 
+    FOREIGN KEY (city_state_id)
+    REFERENCES city_state(city_state_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+
+-- 
+-- TABLE: trainer 
+--
+
+ALTER TABLE trainer ADD CONSTRAINT Refgender33 
+    FOREIGN KEY (gender_id)
+    REFERENCES gender(gender_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE trainer ADD CONSTRAINT Refcity_state47 
+    FOREIGN KEY (city_state_id)
+    REFERENCES city_state(city_state_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE trainer ADD CONSTRAINT Refuser_login27 
+    FOREIGN KEY (account_id)
+    REFERENCES user_login(account_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
 
@@ -399,7 +497,7 @@ ALTER TABLE player_strength ADD CONSTRAINT Refplayer_details151
 -- TABLE: user_login 
 --
 
-ALTER TABLE user_login ADD CONSTRAINT Refrole171 
+ALTER TABLE user_login ADD CONSTRAINT Refrole17 
     FOREIGN KEY (role_type)
     REFERENCES role(role_type) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
